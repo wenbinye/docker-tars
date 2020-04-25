@@ -1,0 +1,6 @@
+[winwin]
+name=CentOS-$releasever - Winwin Ltd
+baseurl=http://mirrors.cuntutu.com/centos/$releasever/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=http://mirrors.cuntutu.com/centos/RPM-GPG-KEY-winwin
