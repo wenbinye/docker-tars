@@ -15,13 +15,15 @@ RUN mkdir -p ${TARS_INSTALL} && cd ${TARS_INSTALL} \
     && tar zxf tars-bin-2.3.0.tar.gz \
     && cp -rf tars/cpp/deploy/* . && rm -rf tars \
     && mkdir -p web \
-    && tar zxf tars-web-2.1.0.tar.gz -C web
+    && tar zxf tars-web-2.1.0.tar.gz -C web 
 
 RUN wget https://github.com/nvm-sh/nvm/archive/v0.35.1.zip;unzip v0.35.1.zip; cp -rf nvm-0.35.1 $HOME/.nvm \
     && echo 'NVM_DIR="$HOME/.nvm"; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"; [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion";' >> $HOME/.bashrc; \
     source $HOME/.bashrc && nvm install v12.13.0
 
 RUN ${TARS_INSTALL}/tar-server.sh
+
+RUN ln -sf /local/service/php72/bin/php /usr/bin/php
 
 ENTRYPOINT [ "${TARS_INSTALL}/docker-init.sh"]
 
