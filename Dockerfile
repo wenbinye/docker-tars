@@ -25,6 +25,8 @@ RUN ${TARS_INSTALL}/tar-server.sh
 
 RUN ln -sf /local/service/php72/bin/php /usr/bin/php
 
-ENTRYPOINT [ "${TARS_INSTALL}/docker-init.sh"]
+COPY wait-for-it.sh /
+
+ENTRYPOINT [ "sh", "-c", "/wait-for-it.sh $MYSQL_HOST:${MYSQL_PORT:-3306} -- $TARS_INSTALL/docker-init.sh" ]
 
 EXPOSE 3000 3001 18993 18793 18693 18193 18593 18493 18393 18293 12000 19385 17890 17891
