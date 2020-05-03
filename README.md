@@ -33,3 +33,21 @@ services:
     volumes:
       - ./tars-data:/data/tars
 ```
+
+## 目录说明
+
+/data/tars 是 docker volume 用于放所有运行时数据
+/root/.bashrc 添加 nvm 环境变量
+/root/.nvm nvm 安装目录
+/usr/local/app/web web 安装目录
+/usr/local/app/tars tars 安装系统安装目录
+/usr/local/app/tars/deploy 部署需要的原文件
+
+deploy/framework/sql 中路径相关已经替换
+
+## 调试脚本
+
+
+export MYSQL_ROOT_PASSWORD=vv123456
+bash -x ./rebuild.sh 
+cd /build/tars/cpp/deploy
