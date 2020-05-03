@@ -32,6 +32,6 @@ COPY scripts /scripts
 
 RUN /scripts/tars-install.sh
 
-ENTRYPOINT /scripts/docker-init.sh
+ENTRYPOINT [ "/scripts/docker-init.sh" ]
 
 EXPOSE 3000 3001 18993 18793 18693 18193 18593 18493 18393 18293 12000 19385 17890 17891
