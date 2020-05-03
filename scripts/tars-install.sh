@@ -36,12 +36,14 @@ replace WEB_PATH ${WEB_PATH} "${TARS_PATH}/*.sh"
 
 ####### install web #############
 mkdir -p ${DEPLOY_PATH}/web/demo
+mkdir -p ${WEB_PATH}/web/files
 
 rm -rf ${WORKDIR}/web/log
 
 cp -rf ${WORKDIR}/web ${WEB_PATH}
 cp -rf ${WORKDIR}/web/config ${DEPLOY_PATH}/web
 cp -rf ${WORKDIR}/web/demo/config ${DEPLOY_PATH}/web/demo
+cp ${WORKDIR}/tools/install.sh ${WEB_PATH}/web/files/
 
 ###### clean #############
 rm -rf ${WORKDIR}

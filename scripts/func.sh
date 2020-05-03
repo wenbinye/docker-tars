@@ -212,3 +212,18 @@ function update_util()
         replace localip.tars.com $HOSTIP $1/${file}
     done
 }
+
+function update_web_conf() 
+{
+    UPDATE_PATH=$1
+
+    replacePath localip.tars.com $HOSTIP ${UPDATE_PATH}
+    replacePath db.tars.com $MYSQLIP ${UPDATE_PATH}
+    replacePath registry.tars.com $HOSTIP ${UPDATE_PATH}
+    replacePath 3306 $PORT ${UPDATE_PATH}
+    replacePath "user: 'tars'" "user: '${TARS_USER}'" ${UPDATE_PATH}
+    replacePath "password: 'tars2015'" "password: '${TARS_PASS}'" ${UPDATE_PATH}
+    replacePath "/usr/local/app" "$WEB_PATH" ${UPDATE_PATH}
+    replacePath "enableAuth: false" "enableAuth: true" ${UPDATE_PATH}
+    replacePath "enableLogin: false" "enableLogin: true" ${UPDATE_PATH}
+}

@@ -59,6 +59,7 @@ echo "HOSTIP=${HOSTIP}"
 
 INSTALL_PATH=/usr/local/app
 WEB_PATH=${INSTALL_PATH}
+UPLOAD_PATH=${INSTALL_PATH}
 TARS_PATH=${INSTALL_PATH}/tars
 DEPLOY_PATH=${TARS_PATH}/deploy
 MYSQL_TOOL=${DEPLOY_PATH}/mysql-tool
@@ -67,6 +68,8 @@ MYSQLIP=${MYSQL_HOST}
 USER=${MYSQL_USER}
 PASS=${MYSQL_ROOT_PASSWORD}
 PORT=${MYSQL_PORT}
+
+TARSALL="tarsregistry tarsAdminRegistry tarsconfig tarsnode tarslog tarsnotify  tarspatch  tarsproperty tarsqueryproperty tarsquerystat  tarsstat"
 if [ "${SLAVE}" != "true" ]; then
     TARS="tarsAdminRegistry tarsregistry tarsconfig tarsnode tarsnotify tarsproperty tarsqueryproperty tarsquerystat tarsstat tarslog tarspatch"
 else
@@ -141,10 +144,11 @@ function create_web_files () {
         if [ -f ${WEB_PATH}/web/files/${var}.tgz ]; then
             echo "${WEB_PATH}/web/files/${var}.tgz exists"
         else
-            cp -rf ${DEPLOY_PATH}/framework/conf $var
-            cp -rf ${DEPLOY_PATH}/framework/util $var
-            cp -rf ${TARS_PATH}/bin $var
-            cp -rf ${TARS_PATH}/data $var
+            mkdir $var
+            cp -rf ${DEPLOY_PATH}/framework/conf/$var/conf $var
+            cp -rf ${DEPLOY_PATH}/framework/util/$var/util $var
+            cp -rf ${TARS_PATH}/${var}/bin $var
+            cp -rf ${TARS_PATH}/${var}/data $var
 
             echo "tar czf ${var}.tgz ${var}"
             tar czf ${var}.tgz ${var}
@@ -160,11 +164,11 @@ function create_web_files () {
 function start_web() {
     echo "update web config: ${WEB_PATH}/web/config"
     cp -rf ${DEPLOY_PATH}/web/config ${WEB_PATH}/web
-    update_conf ${WEB_PATH}/web/config
+    update_web_conf ${WEB_PATH}/web/config
     
     echo "update web demo config: ${WEB_PATH}/web/demo/config"
     cp -rf ${DEPLOY_PATH}/web/demo/config ${WEB_PATH}/web/demo
-    update_conf ${WEB_PATH}/web/demo/config
+    update_web_conf ${WEB_PATH}/web/demo/config
     
     cd ${WEB_PATH}/web; pm2 -s stop tars-node-web ; pm2 -s delete tars-node-web; npm run prd; 
     cd ${WEB_PATH}/web/demo; pm2 -s stop tars-user-system;  pm2 -s delete tars-user-system; npm run prd
