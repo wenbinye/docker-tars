@@ -11,6 +11,7 @@ MYSQL_TOOL=${WORKDIR}/mysql-tool
 
 TARSALL="tarsregistry tarsAdminRegistry tarsconfig tarsnode tarslog tarsnotify  tarspatch  tarsproperty tarsqueryproperty tarsquerystat  tarsstat"
 
+mkdir -p ${TARS_PATH}/tarsnode
 mkdir -p ${DEPLOY_PATH}/framework/sql
 
 cp ${WORKDIR}/mysql-tool ${DEPLOY_PATH}

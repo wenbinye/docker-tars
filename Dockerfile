@@ -18,7 +18,8 @@ RUN yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
     && wget -O-  https://github.com/wenbinye/docker-tars/releases/download/0.1.0/swoole.so.gz | zcat > /opt/remi/php72/root/usr/lib64/php/modules/swoole.so \
     && echo extension=swoole.so > /etc/opt/remi/php72/php.d/20-swoole.ini
 
-COPY scripts /scripts
+COPY scripts/func.sh /scripts/func.sh
+COPY scripts/tars-install.sh /scripts/tars-install.sh
 
 RUN mkdir -p ${TARS_INSTALL} && cd ${TARS_INSTALL} \
     && wget https://github.com/wenbinye/docker-tars/releases/download/0.1.0/tars-bin-2.3.0.tar.gz \
@@ -27,8 +28,12 @@ RUN mkdir -p ${TARS_INSTALL} && cd ${TARS_INSTALL} \
     && cp -rf tars/cpp/deploy/* . && rm -rf tars \
     && mkdir -p web \
     && tar zxf tars-web-2.1.0.tar.gz -C web \
-    && ${TARS_INSTALL}/tar-server.sh \
+    && source $HOME/.bashrc && npm install -g npm pm2 \
+    && cd ${TARS_INSTALL}/web && npm install \
+    && cd ${TARS_INSTALL}/web/demo && npm install \
     && /scripts/tars-install.sh
+
+COPY scripts /scripts
 
 ENTRYPOINT [ "/scripts/docker-init.sh" ]
 

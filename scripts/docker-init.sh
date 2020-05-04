@@ -57,6 +57,7 @@ echo "SLAVE=${SLAVE}"
 echo "DOMAIN=${DOMAIN}"
 echo "HOSTIP=${HOSTIP}"
 
+DATA_PATH=/data/tars
 INSTALL_PATH=/usr/local/app
 WEB_PATH=${INSTALL_PATH}
 UPLOAD_PATH=${INSTALL_PATH}
@@ -75,6 +76,22 @@ if [ "${SLAVE}" != "true" ]; then
 else
     TARS="tarsregistry tarsconfig tarsnode tarsnotify tarsproperty tarsqueryproperty tarsquerystat tarsstat"
 fi
+
+function create_data_dir() {
+    mkdir -p ${DATA_PATH}/app_log
+    mkdir -p ${DATA_PATH}/remote_app_log
+    mkdir -p ${DATA_PATH}/web_log
+    mkdir -p ${DATA_PATH}/demo_log
+    mkdir -p ${DATA_PATH}/patchs
+    mkdir -p ${DATA_PATH}/tarsnode-data
+
+    ln -sfn ${DATA_PATH}/web_log ${WEB_PATH}/web/log 
+    ln -sfn ${DATA_PATH}/demo_log ${WEB_PATH}/web/demo/log 
+    ln -sfn ${DATA_PATH}/patchs ${INSTALL_PATH}/patchs 
+    ln -sfn ${DATA_PATH}/app_log ${TARS_PATH}/app_log 
+    ln -sfn ${DATA_PATH}/tarsnode-data ${TARS_PATH}/tarsnode/data
+    ln -sfn ${DATA_PATH}/remote_app_log ${TARS_PATH}/remote_app_log 
+}
 
 function rebuild_db_if_not_exists() {
     if [ "${SLAVE}" != "true" ]; then
@@ -148,8 +165,10 @@ function create_web_files () {
             cp -rf ${DEPLOY_PATH}/framework/conf/$var/conf $var
             cp -rf ${DEPLOY_PATH}/framework/util/$var/util $var
             cp -rf ${TARS_PATH}/${var}/bin $var
-            cp -rf ${TARS_PATH}/${var}/data $var
-
+            if [ -d ${TARS_PATH}/${var}/data ]; then
+                cp -rf ${TARS_PATH}/${var}/data $var
+            fi
+            
             echo "tar czf ${var}.tgz ${var}"
             tar czf ${var}.tgz ${var}
             cp -rf ${var}.tgz ${WEB_PATH}/web/files/
@@ -178,6 +197,7 @@ trap 'exit' SIGTERM SIGINT
 
 /scripts/wait-for-it.sh "$MYSQL_HOST:${MYSQL_PORT}"
 
+create_data_dir
 rebuild_db_if_not_exists
 update_db_node_info
 start_server
