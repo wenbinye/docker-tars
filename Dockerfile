@@ -5,10 +5,6 @@ RUN yum install -y yum-utils psmisc net-tools wget unzip telnet \
 
 ENV TARS_INSTALL /usr/local/tars/cpp/deploy
 
-RUN wget https://github.com/nvm-sh/nvm/archive/v0.35.1.zip;unzip v0.35.1.zip; cp -rf nvm-0.35.1 $HOME/.nvm \
-    && echo 'NVM_DIR="$HOME/.nvm"; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"; [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion";' >> $HOME/.bashrc; \
-    source $HOME/.bashrc && nvm install v12.13.0
-
 RUN yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
     && yum install -y php72-php-cli \
     && yum clean all && rm -rf /var/cache/yum \
@@ -28,13 +24,16 @@ RUN mkdir -p ${TARS_INSTALL} && cd ${TARS_INSTALL} \
     && cp -rf tars/cpp/deploy/* . && rm -rf tars \
     && mkdir -p web \
     && tar zxf tars-web-2.1.0.tar.gz -C web \
-    && source $HOME/.bashrc && npm install -g npm pm2 \
-    && cd ${TARS_INSTALL}/web && npm install \
-    && cd ${TARS_INSTALL}/web/demo && npm install \
     && /scripts/tars-install.sh
+
+RUN wget https://github.com/nvm-sh/nvm/archive/v0.35.1.zip;unzip v0.35.1.zip; cp -rf nvm-0.35.1 $HOME/.nvm \
+    && echo 'NVM_DIR="$HOME/.nvm"; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"; [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion";' >> $HOME/.bashrc \
+    && source $HOME/.bashrc && nvm install v12.13.0 && npm install -g npm pm2 \
+    && cd /usr/local/app/web && npm install \
+    && cd /usr/local/app/web/demo && npm install
 
 COPY scripts /scripts
 
 ENTRYPOINT [ "/scripts/docker-init.sh" ]
 
-EXPOSE 3000 3001 18993 18793 18693 18193 18593 18493 18393 18293 12000 19385 17890 17891
+EXPOSE 3000 3001 18993 18793 18693 18193 18593 18493 18393 18293 12000 19386 17890 17891
