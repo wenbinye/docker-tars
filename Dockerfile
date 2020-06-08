@@ -6,7 +6,7 @@ RUN yum install -y yum-utils psmisc net-tools wget unzip telnet \
 ENV TARS_INSTALL /usr/local/tars/cpp/deploy
 
 RUN yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
-    && yum install -y php72-php-cli \
+    && yum install -y php72-php-cli php72-php-pdo php72-php-pecl-mysql php72-php-xml \
     && yum clean all && rm -rf /var/cache/yum \
     && ln -sf /usr/bin/php72 /usr/bin/php \
     && wget -O-  https://github.com/wenbinye/docker-tars/releases/download/0.1.0/phptars.so.gz | zcat > /opt/remi/php72/root/usr/lib64/php/modules/phptars.so \
