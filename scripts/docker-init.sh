@@ -9,9 +9,7 @@ elif [ "$1" != "" ]; then
 fi
 
 source /scripts/func.sh
-source ~/.bashrc
-
-NODE_VERSION="v12.13.0"
+source $HOME/.bashrc
 
 if [ "$MYSQL_USER" == "" ]; then
     MYSQL_USER="root"
