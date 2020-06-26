@@ -17,7 +17,7 @@ RUN wget https://github.com/wenbinye/docker-tars/releases/download/v2.4.2/tars-b
     && rm -f tars-bin-2.4.2.tar.gz
 
 RUN wget https://github.com/nvm-sh/nvm/archive/v0.35.1.zip \
-    && unzip nvm-v0.35.1.zip -d $HOME && rm -f nvm-v0.35.1.zip \
+    && unzip v0.35.1.zip -d $HOME && rm -f nvm-v0.35.1.zip \
     && ln -sfn $HOME/nvm-0.35.1 $HOME/.nvm \
     && echo 'NVM_DIR="$HOME/.nvm"; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"; [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion";' >> $HOME/.bashrc \
     && source $HOME/.bashrc \
